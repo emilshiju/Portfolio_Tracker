@@ -1,7 +1,7 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models, Types } from 'mongoose';
 
 const StockSchema = new Schema({
-  particulars: { type: String, required: true },
+  particulars: { type: Types.ObjectId, required: true },
   purchasePrice: { type: Number, required: true },
   quantity: { type: Number, required: true },
   exchange: { type: String }, 
@@ -10,4 +10,7 @@ const StockSchema = new Schema({
   createdAt: { type: Date }, 
 });
 
-export default models.Stock || model('stocks', StockSchema);
+
+const Stock = models.stocks || model("stocks", StockSchema);
+
+export default Stock;

@@ -1,31 +1,19 @@
 
 
-// export default function Home() {
-
-//   return (
-    
-//     <div >
-      
-//       <div>HELLO</div>
-
-
-//     </div>
-//   );
-// }
-
 "use client"
 
 
 
 
 import * as React from "react";
-
+import { useEffect } from "react";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { getAllStockApi } from "../lib/api_service_client/portfolioHandler";
 
 
 // Define the type for our table data
@@ -63,12 +51,22 @@ const columns = [
 
 
 
+
+
 export default function App() {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+
+
+  useEffect(()=>{
+    getAllStockApi()
+  },[])
+
+  
 
   return (
     <div className="p-8">

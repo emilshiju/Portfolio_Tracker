@@ -1,8 +1,11 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models, Types } from 'mongoose';
 
 const SectorSchema = new Schema({
+  _id: { type: Types.ObjectId },
   name: { type: String, required: true }, 
   createdAt: { type: Date }, 
 });
 
-export default models.Sector || model('sectors', SectorSchema);
+const Sector = models.Sector || model('Sector', SectorSchema, 'sectors');
+
+export default Sector;
