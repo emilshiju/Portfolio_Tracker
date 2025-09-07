@@ -1,4 +1,4 @@
-import { StockInfo } from "@/src/types/component_type/component_type";
+import { newTableRow, StockInfo } from "@/src/types/component_type/component_type";
 import axiosClient from "../axiosClient"
 import { getApiErrorMessage, resCustomType } from "@/src/types/api/resType";
 
@@ -36,7 +36,7 @@ export const getAllStockApi=async()=>{
 
 
 
-export const getLiveMarketDataApi = async (stocks: StockInfo[]) => {
+export const getLiveMarketDataApi = async (stocks:newTableRow) => {
     try {
         const response:resCustomType = await axiosClient.post(
             '/market-data', 

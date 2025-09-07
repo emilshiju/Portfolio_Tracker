@@ -1,4 +1,4 @@
-import { StockInfo, StockType, TableRow } from "../types/component_type/component_type";
+import { newTableRow, StockInfo, StockType, TableRow, TableRowOne } from "../types/component_type/component_type";
 import DataTable from "./DataTable"
 import { useEffect ,useState,useMemo} from "react";
 import {
@@ -9,101 +9,156 @@ import {
 } from "@tanstack/react-table";
 import { getAllStockApi, getLiveMarketDataApi } from "../lib/api_service_client/portfolioHandler";
 import { StockSummary } from "../types/controller_type/controller_type";
+import transformData from "../util/transformData";
+import flattenSectors from "../util/formatters";
 
 
 
 const ShowTableContainer=()=>{
 
     
-    const columnHelper = createColumnHelper<TableRow>();
+    const columnHelper = createColumnHelper<TableRowOne>();
     
     
 
 
     const columns = useMemo(
     () => [
-      // Create a header group for stock details
-      columnHelper.group({
-        id: "stock_details",
-        header: () => <span>Stock Details</span>,
-        // Define all columns within this group
-        columns: [
-          columnHelper.accessor("particulars", {
-            header: "Particulars",
-            cell: (info) => info.getValue(),
-          }),
-          columnHelper.accessor("purchasePrice", {
-            header: "Purchase Price",
-            cell: (info) => `₹${info.getValue()}`,
-          }),
-          columnHelper.accessor("quantity", {
-            header: "Quantity",
-            cell: (info) => info.getValue(),
-          }),
-          columnHelper.accessor("exchange", {
-            header: "Exchange",
-            cell: (info) => info.getValue(),
-          }),
-
-
-
-           columnHelper.accessor("investment", {
-            header: "investment",
-            cell: (info) => info.getValue() ?? "Loading...",
-          }),
-          columnHelper.accessor("presentValue", {
-            header: "presentValue",
-            cell: (info) => info.getValue() ?? "Loading...",
-          }),
-          columnHelper.accessor("gainLoss", {
-            header: "gainLoss",
-            cell: (info) => info.getValue() ?? "Loading...",
-          }),
-
-           columnHelper.accessor("currentPrice", {
-            header: "currentPrice",
-            cell: (info) => info.getValue() ?? "Loading...",
-          }),
-          columnHelper.accessor("peRatio", {
-            header: "peRatio",
-            cell: (info) => info.getValue() ?? "Loading...",
-          }),
-           columnHelper.accessor("latestEarnings", {
-            header: "latestEarnings",
-            cell: (info) => info.getValue() ?? "Loading...",
-          }),
-
-
-        ],
-      }),
-      
-    ],
+  {
+    accessorKey: "sectorName",
+    header: "Sector / Stock",
+    cell: ({ row }:any) =>
+      row.original.isSector
+        ? <strong>{row.original.sectorName}</strong>
+        : row.original.particulars ?? "Loading...",
+  },
+  {
+    accessorKey: "investment",
+    header: "Investment",
+    cell: ({ row }) =>
+      row.original.isSector
+        ? row.original.totalInvestment
+        : (row.original.investment ?? "Loading..."),
+  },
+  {
+    accessorKey: "presentValue",
+    header: "Present Value",
+    cell: ({ row }) =>
+      row.original.isSector
+        ? row.original.totalPresentValue
+        : (row.original.presentValue ?? "Loading..."),
+  },
+  {
+    accessorKey: "gainLoss",
+    header: "Gain / Loss",
+    cell: ({ row }) =>
+      row.original.isSector
+        ? row.original.totalGainLoss
+        : (row.original.gainLoss ?? "Loading..."),
+  },
+  {
+    accessorKey: "portfolioPct",
+    header: "Portfolio (%)",
+    cell: ({ row }) =>
+      row.original.isSector
+        ? row.original.portfolioRatio
+        : (row.original.portfolioPct ?? "Loading..."),
+  },
+  {
+    accessorKey: "cmp",
+    header: "CMP",
+    cell: ({ row }) =>
+      row.original.isSector ? null : (row.original.cmp ?? "Loading..."),
+  },
+  {
+    accessorKey: "peRatio",
+    header: "P/E",
+    cell: ({ row }) =>
+      row.original.isSector ? null : (row.original.peRatio ?? "Loading..."),
+  },
+  {
+    accessorKey: "latestEarnings",
+    header: "Latest Earnings",
+    cell: ({ row }) =>
+      row.original.isSector ? null :  (row.original.latestEarnings ?? "Loading...") ,
+  },
+],
     [columnHelper] 
   );
 
 
-    const [allData, setData] = useState<TableRow[]>([]);
+    const [allData, setData] = useState<newTableRow>({});
+
+    const [tableData,setTableData]=useState<TableRowOne[]>([]);
 
 
-    const fetchLiveData = async (stocks: StockType[]) => {
-    const stocksToUpdate = stocks || allData;
-    if (stocksToUpdate.length === 0) return;
+    const fetchLiveData = async (stocks:newTableRow) => {
+    const sectorsCheck  = stocks || allData;
+     const sectors = Object.keys(stocks);
+
+    
+
+
+    if (sectors.length === 0) return;
 
     try {
 
-          const simplifiedStocks:StockInfo[] = stocksToUpdate.map(stock => ({
-      particulars: stock.particulars,
-      exchange: stock.exchange,
-      purchasePrice:stock.purchasePrice,
-      quantity:stock.quantity
-    }));
+    //       const simplifiedStocks:StockInfo[] = stocksToUpdate.map(stock => ({
+    //   particulars: stock.particulars,
+    //   exchange: stock.exchange,
+    //   purchasePrice:stock.purchasePrice,
+    //   quantity:stock.quantity
+    // }));
 
         
-        const liveDataResponse = await getLiveMarketDataApi(simplifiedStocks);
+        const liveDataResponse = await getLiveMarketDataApi(stocks);
         
         if (liveDataResponse.success && liveDataResponse.data) {
 
-          setData(liveDataResponse.data)
+
+
+//           const flattenSectors = (allSectors: any): TableRowOne[] => {
+//   const rows: TableRowOne[] = []
+
+//   Object.entries(allSectors).forEach(([sectorName, sectorData]: [string, any]) => {
+//     // Sector summary row
+//     rows.push({
+//       isSector: true,
+//       sectorName,
+//       totalInvestment: sectorData.summary.totalInvestment,
+//       totalPresentValue: sectorData.summary.totalPresentValue,
+//       totalGainLoss: sectorData.summary.totalGainLoss,
+//       portfolioRatio: sectorData.summary.portfolioRatio,
+//     })
+
+//     // Stock rows
+//     sectorData.stocks.forEach((stock: any) => {
+//       rows.push({
+//         isSector: false,
+//         sectorName,
+//         particulars: stock.particulars,
+//         purchasePrice: stock.purchasePrice,
+//         quantity: stock.quantity,
+//         investment: stock.investment,
+//         portfolioPct: stock.portfolioPct,
+//         exchange: stock.exchange,
+//         cmp: stock.cmp,
+//         presentValue: stock.presentValue,
+//         gainLoss: stock.gainLoss,
+//         peRatio: stock.peRatio,
+//         latestEarnings: stock.latestEarnings,
+//       })
+//     })
+//   })
+
+//   return rows
+// }
+
+
+
+           let ressData=flattenSectors(liveDataResponse.data)
+          // setData(ressData)
+          setTableData(ressData)
           
             
         }
@@ -123,8 +178,44 @@ const ShowTableContainer=()=>{
         
         try {
             const allStock = await getAllStockApi();
+
             if (allStock?.success) {
+
+
+
+//               const transformData = (backendData: any): TableRowOne[] => {
+//   const rows: TableRowOne[] = []
+
+//   Object.entries(backendData).forEach(([sectorName, stocks]: [string, any]) => {
+//     // Push sector row
+//     rows.push({
+//       isSector: true,
+//       sectorName,
+//     })
+
+//     // Push stock rows
+//     stocks.forEach((stock: any) => {
+//       rows.push({
+//         isSector: false,
+//         sectorName,
+//         particulars: stock.particulars,
+//         purchasePrice: stock.purchasePrice,
+//         quantity: stock.quantity,
+//         exchange: stock.exchange,
+  
+//       })
+//     })
+//   })
+
+//   return rows
+// }
+
+
+
+              const ressData=transformData(allStock.data)
+
                 setData(allStock.data);
+                setTableData(ressData)
                
                 await fetchLiveData(allStock.data);
             }
@@ -154,7 +245,9 @@ const ShowTableContainer=()=>{
         let interval: NodeJS.Timeout | undefined; 
 
         // Set up interval for live data updates every 15 seconds
-        if (allData.length > 0) {
+        const sectors = Object.keys(allData);
+
+        if (sectors.length > 0) {
             interval = setInterval(() => {
                 fetchLiveData(allData); 
             }, 15_000); 
@@ -165,7 +258,7 @@ const ShowTableContainer=()=>{
                 clearInterval(interval);
             }
         };
-    }, [allData.length]);
+    }, [tableData.length]);
     
 
     
@@ -175,7 +268,7 @@ const ShowTableContainer=()=>{
     return (
         <div>
 
-       {allData.length&&<DataTable columns={columns} data={allData} />}
+       {tableData.length&&<DataTable columns={columns} data={tableData} />}
             
         </div>
     )

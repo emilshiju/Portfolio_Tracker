@@ -45,14 +45,14 @@ const columns = [
     header: "exchange",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("sectorId", {
-    header: "sectorId",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("portfolioId", {
-    header: "portfolioId",
-    cell: (info) => info.getValue(),
-  }),
+  // columnHelper.accessor("sectorId", {
+  //   header: "sectorId",
+  //   cell: (info) => info.getValue(),
+  // }),
+  // columnHelper.accessor("portfolioId", {
+  //   header: "portfolioId",
+  //   cell: (info) => info.getValue(),
+  // }),
 ];
 
 

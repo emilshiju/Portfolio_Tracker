@@ -1,6 +1,9 @@
-import sector from "../lib/db/models/sector"
+import "../lib/db/models/sector"; 
+import "../lib/db/models/stock"; 
 import stock from "../lib/db/models/stock"
 import dbConnect  from "../lib/db/mongodb"
+import { StockType } from "../types/component_type/component_type";
+import { GroupedStocksBySector, StockWithSectorType } from "../types/controller_type/controller_type";
 
 
 
@@ -11,18 +14,45 @@ export async function getAll(){
 
         console.log("first")
         await dbConnect()
-        console.log("second")
-        const allStocks=await stock.find()
-        
-   
 
-        return allStocks
+         
+        const allStocks = await stock.find().populate("sectorId", "name", "Sector");
+
+    
+        const groupedBySector:GroupedStocksBySector= {};
+
+
+    allStocks.forEach((stock) => {
+
+      const sectorName = stock.sectorId?.name || "Uncategorized";
+
+      if (!groupedBySector[sectorName]) {
+        groupedBySector[sectorName] = [];
+      }
+
+      
+      const {  particulars, purchasePrice, quantity, exchange, createdAt } = stock;
+
+  groupedBySector[sectorName].push({
+    particulars,
+    purchasePrice,
+    quantity,
+    exchange,
+    createdAt,
+  });
+
+
+    });
+
+    console.log("all data",groupedBySector)
+
+    return groupedBySector;
 
 
 
 
     }catch(error){
-        console.log("error occured in the getAll Controller")
+        console.log("error occured in the getAll Controller",error)
         return false
     }
 }
