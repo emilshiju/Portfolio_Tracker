@@ -9,10 +9,11 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { StockType, TableProps } from "../types/component_type/component_type";
+import { StockType, TableProps, TableRow } from "../types/component_type/component_type";
+import { StockSummary } from "../types/controller_type/controller_type";
 
 
-const DataTable=({ columns, data }:TableProps<StockType>)=>{
+const DataTable=({ columns, data }:TableProps<TableRow>)=>{
 
       const table = useReactTable({
         data: data,

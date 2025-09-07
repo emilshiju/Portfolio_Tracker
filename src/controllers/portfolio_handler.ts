@@ -14,7 +14,7 @@ export async function getAll(){
         console.log("second")
         const allStocks=await stock.find()
         
-        console.log(allStocks)
+   
 
         return allStocks
 

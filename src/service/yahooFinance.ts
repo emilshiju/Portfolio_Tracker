@@ -1,20 +1,3 @@
-// import yahooFinance from 'yahoo-finance2';
-
-// export async function getStockPrice(ticker: string): Promise<void> {
-//   try {
-    
-//     const quote = await yahooFinance.quote(ticker);
-    
-//     console.log(`Current Price (CMP): ${quote.regularMarketPrice}`);
-    
-//   } catch (error) {
-//     console.error('Error fetching stock data:', error);
-//   }
-// }
-
-// // Examples:
-// // NSE: ICICI Bank
-// getStockPrice('ICICIBANK.NS');
 
 
 
@@ -37,7 +20,6 @@ export async function getStockPrice(ticker: string , exchange: string) {
 
     
     return {
-      ticker,
       currentPrice: quote?.regularMarketPrice ?? "N/A"
     };
   } catch (error) {
@@ -45,7 +27,6 @@ export async function getStockPrice(ticker: string , exchange: string) {
 
     
     return {
-      ticker,
       currentPrice: "N/A"
     };
   }

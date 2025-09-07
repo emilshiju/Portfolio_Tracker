@@ -1,4 +1,4 @@
-import { StockType } from "../types/component_type/component_type";
+import { StockInfo, StockType, TableRow } from "../types/component_type/component_type";
 import DataTable from "./DataTable"
 import { useEffect ,useState,useMemo} from "react";
 import {
@@ -7,35 +7,16 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { getAllStockApi } from "../lib/api_service_client/portfolioHandler";
+import { getAllStockApi, getLiveMarketDataApi } from "../lib/api_service_client/portfolioHandler";
+import { StockSummary } from "../types/controller_type/controller_type";
 
 
 
 const ShowTableContainer=()=>{
 
-    // Create a column helper to ensure type safety
-    const columnHelper = createColumnHelper<StockType>();
     
-    // Define columns for the table
-    // const columns = [
-    //   columnHelper.accessor("particulars", {
-    //     header: "particulars",
-    //     cell: (info) => info.getValue(),
-    //   }),
-    //   columnHelper.accessor("purchasePrice", {
-    //     header: "purchasePrice",
-    //     cell: (info) => info.getValue(),
-    //   }),
-    //   columnHelper.accessor("quantity", {
-    //     header: "quantity",
-    //     cell: (info) => info.getValue(),
-    //   }),
-    //    columnHelper.accessor("exchange", {
-    //     header: "exchange",
-    //     cell: (info) => info.getValue(),
-    //   }),
-      
-    // ];
+    const columnHelper = createColumnHelper<TableRow>();
+    
     
 
 
@@ -53,7 +34,7 @@ const ShowTableContainer=()=>{
           }),
           columnHelper.accessor("purchasePrice", {
             header: "Purchase Price",
-            cell: (info) => info.getValue(),
+            cell: (info) => `₹${info.getValue()}`,
           }),
           columnHelper.accessor("quantity", {
             header: "Quantity",
@@ -63,50 +44,128 @@ const ShowTableContainer=()=>{
             header: "Exchange",
             cell: (info) => info.getValue(),
           }),
+
+
+
+           columnHelper.accessor("investment", {
+            header: "investment",
+            cell: (info) => info.getValue() ?? "Loading...",
+          }),
+          columnHelper.accessor("presentValue", {
+            header: "presentValue",
+            cell: (info) => info.getValue() ?? "Loading...",
+          }),
+          columnHelper.accessor("gainLoss", {
+            header: "gainLoss",
+            cell: (info) => info.getValue() ?? "Loading...",
+          }),
+
+           columnHelper.accessor("currentPrice", {
+            header: "currentPrice",
+            cell: (info) => info.getValue() ?? "Loading...",
+          }),
+          columnHelper.accessor("peRatio", {
+            header: "peRatio",
+            cell: (info) => info.getValue() ?? "Loading...",
+          }),
+           columnHelper.accessor("latestEarnings", {
+            header: "latestEarnings",
+            cell: (info) => info.getValue() ?? "Loading...",
+          }),
+
+
         ],
       }),
-      // You can create additional groups if needed
-      // For example, if you had more fields:
-      /*
-      columnHelper.group({
-        id: "additional_info",
-        header: () => <span>Additional Info</span>,
-        columns: [
-          columnHelper.accessor("sectorId", {
-            header: "Sector ID",
-            cell: (info) => info.getValue().toString(),
-          }),
-          columnHelper.accessor("portfolioId", {
-            header: "Portfolio ID",
-            cell: (info) => info.getValue().toString(),
-          }),
-        ],
-      }),
-      */
+      
     ],
-    [columnHelper] // Add columnHelper to dependency array
+    [columnHelper] 
   );
 
 
-    const [allData, setData] = useState<StockType[]>([]);
-    
-    
-    
-     
-    
-      const fetchAllStock=async()=>{
-    
-        const allStock=await  getAllStockApi()
-        if(allStock?.success){
-          setData(allStock.data)
-        }
+    const [allData, setData] = useState<TableRow[]>([]);
+
+
+    const fetchLiveData = async (stocks: StockType[]) => {
+    const stocksToUpdate = stocks || allData;
+    if (stocksToUpdate.length === 0) return;
+
+    try {
+
+          const simplifiedStocks:StockInfo[] = stocksToUpdate.map(stock => ({
+      particulars: stock.particulars,
+      exchange: stock.exchange,
+      purchasePrice:stock.purchasePrice,
+      quantity:stock.quantity
+    }));
+
         
+        const liveDataResponse = await getLiveMarketDataApi(simplifiedStocks);
+        
+        if (liveDataResponse.success && liveDataResponse.data) {
+
+          setData(liveDataResponse.data)
+          
+            
+        }
+
+
+    } catch (error) {
+        console.error("Error fetching live market data:", error);
+    }
+};
+
+
+
+
+
     
-      }
+    const fetchAllStock = async () => {
+        
+        try {
+            const allStock = await getAllStockApi();
+            if (allStock?.success) {
+                setData(allStock.data);
+               
+                await fetchLiveData(allStock.data);
+            }
+        } catch (error) {
+            console.error("Error fetching stock data:", error);
+        } finally {
+           
+        }
+    };
+
     
-      useEffect(()=>{
-       fetchAllStock()
-      },[])
+
+
+    
+
+
+
+
+    useEffect(() => {
+        fetchAllStock();
+    }, []);
+
+    
+
+    useEffect(() => {
+
+        let interval: NodeJS.Timeout | undefined; 
+
+        // Set up interval for live data updates every 15 seconds
+        if (allData.length > 0) {
+            interval = setInterval(() => {
+                fetchLiveData(allData); 
+            }, 15_000); 
+        }
+
+        return () => {
+            if (interval) {
+                clearInterval(interval);
+            }
+        };
+    }, [allData.length]);
     
 
     
@@ -114,11 +173,10 @@ const ShowTableContainer=()=>{
 
 
     return (
-
         <div>
 
-            {allData && <DataTable columns={columns} data={allData} />}
-
+       {allData.length&&<DataTable columns={columns} data={allData} />}
+            
         </div>
     )
 }
