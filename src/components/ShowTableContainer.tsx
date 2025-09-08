@@ -81,6 +81,31 @@ const ShowTableContainer=()=>{
     cell: ({ row }) =>
       row.original.isSector ? null :  (row.original.latestEarnings ?? "Loading...") ,
   },
+  {
+  accessorKey: "status",
+  header: "Status",
+  cell: ({ row }) => {
+    const value = row.original.isSector
+      ? row.original.totalGainLoss
+      : row.original.gainLoss;
+
+    if (value === undefined || value === null) {
+      return null;
+    }
+
+    const numericValue = Number(value);
+    const isPositive = numericValue >= 0;
+
+    return (
+       <span
+        className={`inline-block w-12 h-8 rounded-md ${
+          isPositive ? "bg-green-500" : "bg-red-500"
+        }`}
+      />
+    );
+  },
+},
+
 ],
     [columnHelper] 
   );
