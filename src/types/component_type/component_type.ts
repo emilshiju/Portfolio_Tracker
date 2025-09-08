@@ -1,7 +1,5 @@
-import { Types } from "mongoose";
 
 import {
-  ColumnDef,
   GroupColumnDef
 } from "@tanstack/react-table"
 import { allSector, StockSummary } from "../controller_type/controller_type";
@@ -61,6 +59,7 @@ export interface finalTableRow {
   gainLoss?: number|string
   peRatio?: number|string
   latestEarnings?: number|string
+  status?:boolean
 
 
 }

@@ -1,4 +1,4 @@
-import { MONGODB_URI ,DB_NAME} from '@/src/config/db';
+import { MONGODB_URI } from '@/src/config/db';
 
 
 import mongoose, { Mongoose } from 'mongoose';

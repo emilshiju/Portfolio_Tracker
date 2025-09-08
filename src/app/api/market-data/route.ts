@@ -1,6 +1,5 @@
 import { allMarketData } from "@/src/controllers/marketData_handler";
-import { StockInfo } from "@/src/types/component_type/component_type";
-import { GroupedStocksBySector, stockDetails } from "@/src/types/controller_type/controller_type";
+import { GroupedStocksBySector } from "@/src/types/controller_type/controller_type";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -9,6 +8,8 @@ export async function POST(request:NextRequest) {
 
 
    try{
+
+    console.log("second request came")
 
 
         const data :GroupedStocksBySector= await request.json()

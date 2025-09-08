@@ -27,10 +27,25 @@ export const getApiErrorMessage = (error: unknown): string => {
 
 
 
-export interface resCustomType{
+// export interface resCustomType{
 
+//   success: boolean;
+//   data:any;
+//   message: string;
+//   statusCode: number;
+// }
+
+
+export interface InnerData<T> {
   success: boolean;
-  data:any;
+  data: T;     
+  message: string;
+}
+
+
+export interface resCustomType<T = unknown> {
+  success: boolean;
+  data: InnerData<T>;
   message: string;
   statusCode: number;
 }

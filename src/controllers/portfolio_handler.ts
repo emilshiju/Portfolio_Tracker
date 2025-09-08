@@ -2,8 +2,7 @@ import "../lib/db/models/sector";
 import "../lib/db/models/stock"; 
 import stock from "../lib/db/models/stock"
 import dbConnect  from "../lib/db/mongodb"
-import { StockType } from "../types/component_type/component_type";
-import { GroupedStocksBySector, StockWithSectorType } from "../types/controller_type/controller_type";
+import { GroupedStocksBySector } from "../types/controller_type/controller_type";
 
 
 

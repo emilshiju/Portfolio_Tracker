@@ -1,6 +1,7 @@
-import { newTableRow, StockInfo } from "@/src/types/component_type/component_type";
+import { newTableRow} from "@/src/types/component_type/component_type";
 import axiosClient from "../axiosClient"
 import { getApiErrorMessage, resCustomType } from "@/src/types/api/resType";
+import { GroupedStocksBySector, PortfolioData } from "@/src/types/controller_type/controller_type";
 
 
 
@@ -10,7 +11,7 @@ export const getAllStockApi=async()=>{
 
        
 
-        const resAllStock:resCustomType=await axiosClient.get('/all')
+        const resAllStock:resCustomType<GroupedStocksBySector>=await axiosClient.get('/all')
         console.log("i got the resposne check it ",resAllStock)
         
     return {
@@ -38,14 +39,14 @@ export const getAllStockApi=async()=>{
 
 
 
-export const getLiveMarketDataApi = async (stocks:newTableRow) => {
+export const getLiveMarketDataApi = async (stocks:GroupedStocksBySector) => {
 
      
 
     try {
         // throw new Error("faild")
 
-        const response:resCustomType = await axiosClient.post(
+        const response:resCustomType<PortfolioData > = await axiosClient.post(
             '/market-data', 
              stocks
         );

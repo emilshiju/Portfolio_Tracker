@@ -9,6 +9,8 @@ const CACHE_TTL = 15 * 1000; // 15 seconds
 
 
 
+
+
 import yahooFinance from 'yahoo-finance2';
 
 export async function getStockPrice(ticker: string , exchange: string) {
@@ -18,10 +20,19 @@ export async function getStockPrice(ticker: string , exchange: string) {
       const cacheKey = `${ticker}-${exchange}`;
     const cached = stockPriceCache[cacheKey];
 
+    
+console.log("cache key")
+console.log(cacheKey)
+if(cached){
+  console.log("yes there ")
+}
+
    
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
       return { currentPrice: cached.currentPrice }; 
     }
+
+    console.log("middle")
 
 
     
@@ -37,7 +48,7 @@ export async function getStockPrice(ticker: string , exchange: string) {
 
   // Save in cache
     stockPriceCache[cacheKey] = { currentPrice:quote?.regularMarketPrice ?? "N/A", timestamp: Date.now() };
-
+   console.log("last",stockPriceCache)
     
     return {
       currentPrice: quote?.regularMarketPrice ?? "N/A"

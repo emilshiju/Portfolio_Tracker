@@ -22,7 +22,7 @@ const transformData = (backendData: GroupedStocksBySector): finalTableRow[] => {
         purchasePrice: stock.purchasePrice,
         quantity: stock.quantity,
         exchange: stock.exchange,
-  
+      
       })
     })
   })

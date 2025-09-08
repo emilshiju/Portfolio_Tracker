@@ -1,8 +1,8 @@
-import dbConnect from "../lib/db/mongodb"
+
 import { getGoogleFinanceData } from "../service/googleFinance"
 import { getStockPrice } from "../service/yahooFinance"
-import { StockInfo } from "../types/component_type/component_type"
-import { GroupedStocksBySector, PortfolioData, stockDetails, StockSummary } from "../types/controller_type/controller_type"
+
+import { GroupedStocksBySector, PortfolioData  } from "../types/controller_type/controller_type"
 
 
 export async function allMarketData(data:GroupedStocksBySector): Promise<PortfolioData | boolean> {
@@ -14,7 +14,7 @@ export async function allMarketData(data:GroupedStocksBySector): Promise<Portfol
 
 
 
-       const sectorResults: any = {};
+       const sectorResults:PortfolioData = {};
     let totalPortfolioInvestment = 0;
 
     // First pass: Calculate total portfolio investment
@@ -48,9 +48,7 @@ export async function allMarketData(data:GroupedStocksBySector): Promise<Portfol
       for (const stock of stocks) {
         const { particulars, exchange, purchasePrice, quantity } = stock;
 
-        // const cmp = await getStockPrice(particulars, exchange);
-        // const googleData = await getGoogleFinanceData(particulars, exchange);
-
+       
           
     const [cmp, googleData] = await Promise.all([
       getStockPrice(particulars, exchange),
@@ -64,7 +62,7 @@ export async function allMarketData(data:GroupedStocksBySector): Promise<Portfol
         let presentValue: number | string = "N/A";
         let gainLoss: number | string = "N/A";
         
-        let currentPrice: number | string = cmp?.currentPrice ?? "N/A";
+        const currentPrice: number | string = cmp?.currentPrice ?? "N/A";
 
         console.log("in here i got the current price")
         console.log(currentPrice)

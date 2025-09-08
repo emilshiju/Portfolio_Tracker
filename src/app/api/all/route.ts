@@ -10,6 +10,8 @@ export async function GET(){
     try{
 
 
+        console.log("first request came")
+
 
         const allStocks=await getAll()
 

@@ -1,16 +1,12 @@
 
 'use client'
 
-import { useEffect ,useState } from "react"
-
 import {
-  createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { finalTableRow, newTableRow, StockType, TableProps, TableRow } from "../types/component_type/component_type";
-import { StockSummary } from "../types/controller_type/controller_type";
+import { finalTableRow,  TableProps, } from "../types/component_type/component_type";
 
 
 const DataTable=({ columns, data }:TableProps<finalTableRow>)=>{
