@@ -1,11 +1,13 @@
-import { TableRowOne } from "../types/component_type/component_type"
+import {  finalTableRow} from "../types/component_type/component_type"
+import { allSector, PortfolioData, StockSummary } from "../types/controller_type/controller_type"
 
 
- const flattenSectors = (allSectors: any): TableRowOne[] => {
-  const rows: TableRowOne[] = []
+ const flattenSectors = (allSectors: PortfolioData): finalTableRow[] => {
+  const rows: finalTableRow[] = []
 
-  Object.entries(allSectors).forEach(([sectorName, sectorData]: [string, any]) => {
-    // Sector summary row
+  Object.entries(allSectors).forEach(([sectorName, sectorData]: [string, allSector]) => {
+    
+
     rows.push({
       isSector: true,
       sectorName,
@@ -15,8 +17,8 @@ import { TableRowOne } from "../types/component_type/component_type"
       portfolioRatio: sectorData.summary.portfolioRatio,
     })
 
-    // Stock rows
-    sectorData.stocks.forEach((stock: any) => {
+    
+    sectorData.stocks.forEach((stock: StockSummary) => {
       rows.push({
         isSector: false,
         sectorName,
@@ -34,6 +36,9 @@ import { TableRowOne } from "../types/component_type/component_type"
       })
     })
   })
+
+  console.log("i got the full rowwwwwwwwwwwwwwwww")
+  console.log(rows)
 
   return rows
 }

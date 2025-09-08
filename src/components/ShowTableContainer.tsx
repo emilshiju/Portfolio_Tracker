@@ -1,4 +1,4 @@
-import { newTableRow, StockInfo, StockType, TableRow, TableRowOne } from "../types/component_type/component_type";
+import { finalTableRow, newTableRow, StockInfo, StockType, TableRow } from "../types/component_type/component_type";
 import DataTable from "./DataTable"
 import { useEffect ,useState,useMemo} from "react";
 import {
@@ -17,10 +17,9 @@ import flattenSectors from "../util/formatters";
 const ShowTableContainer=()=>{
 
     
-    const columnHelper = createColumnHelper<TableRowOne>();
+    const columnHelper = createColumnHelper<finalTableRow>();
     
     
-
 
     const columns = useMemo(
     () => [
@@ -89,12 +88,12 @@ const ShowTableContainer=()=>{
 
     const [allData, setData] = useState<newTableRow>({});
 
-    const [tableData,setTableData]=useState<TableRowOne[]>([]);
+    const [tableData,setTableData]=useState<finalTableRow[]>([]);
 
 
     const fetchLiveData = async (stocks:newTableRow) => {
     const sectorsCheck  = stocks || allData;
-     const sectors = Object.keys(stocks);
+     const sectors = Object.keys(sectorsCheck);
 
     
 
@@ -103,12 +102,6 @@ const ShowTableContainer=()=>{
 
     try {
 
-    //       const simplifiedStocks:StockInfo[] = stocksToUpdate.map(stock => ({
-    //   particulars: stock.particulars,
-    //   exchange: stock.exchange,
-    //   purchasePrice:stock.purchasePrice,
-    //   quantity:stock.quantity
-    // }));
 
         
         const liveDataResponse = await getLiveMarketDataApi(stocks);
@@ -117,47 +110,10 @@ const ShowTableContainer=()=>{
 
 
 
-//           const flattenSectors = (allSectors: any): TableRowOne[] => {
-//   const rows: TableRowOne[] = []
-
-//   Object.entries(allSectors).forEach(([sectorName, sectorData]: [string, any]) => {
-//     // Sector summary row
-//     rows.push({
-//       isSector: true,
-//       sectorName,
-//       totalInvestment: sectorData.summary.totalInvestment,
-//       totalPresentValue: sectorData.summary.totalPresentValue,
-//       totalGainLoss: sectorData.summary.totalGainLoss,
-//       portfolioRatio: sectorData.summary.portfolioRatio,
-//     })
-
-//     // Stock rows
-//     sectorData.stocks.forEach((stock: any) => {
-//       rows.push({
-//         isSector: false,
-//         sectorName,
-//         particulars: stock.particulars,
-//         purchasePrice: stock.purchasePrice,
-//         quantity: stock.quantity,
-//         investment: stock.investment,
-//         portfolioPct: stock.portfolioPct,
-//         exchange: stock.exchange,
-//         cmp: stock.cmp,
-//         presentValue: stock.presentValue,
-//         gainLoss: stock.gainLoss,
-//         peRatio: stock.peRatio,
-//         latestEarnings: stock.latestEarnings,
-//       })
-//     })
-//   })
-
-//   return rows
-// }
-
-
 
            let ressData=flattenSectors(liveDataResponse.data)
-          // setData(ressData)
+
+  
           setTableData(ressData)
           
             
@@ -180,36 +136,6 @@ const ShowTableContainer=()=>{
             const allStock = await getAllStockApi();
 
             if (allStock?.success) {
-
-
-
-//               const transformData = (backendData: any): TableRowOne[] => {
-//   const rows: TableRowOne[] = []
-
-//   Object.entries(backendData).forEach(([sectorName, stocks]: [string, any]) => {
-//     // Push sector row
-//     rows.push({
-//       isSector: true,
-//       sectorName,
-//     })
-
-//     // Push stock rows
-//     stocks.forEach((stock: any) => {
-//       rows.push({
-//         isSector: false,
-//         sectorName,
-//         particulars: stock.particulars,
-//         purchasePrice: stock.purchasePrice,
-//         quantity: stock.quantity,
-//         exchange: stock.exchange,
-  
-//       })
-//     })
-//   })
-
-//   return rows
-// }
-
 
 
               const ressData=transformData(allStock.data)

@@ -13,10 +13,10 @@ export interface StockSummary {
   purchasePrice: number;
   quantity: number;
   investment: number;
-  portfolio:number|string
+  portfolioPct:number|string
   presentValue: number | string;
   gainLoss: number | string;
-  currentPrice: number | string;
+  cmp: number | string;
   peRatio: number | string;
   latestEarnings: number | string;
 }
@@ -57,5 +57,5 @@ export interface allSector {
   summary: SectorSummary;
 }
 
-// Using Record to allow any sector name dynamically
+
 export type PortfolioData = Record<string, allSector>;

@@ -56,7 +56,13 @@ export async function allMarketData(data:GroupedStocksBySector): Promise<Portfol
 
         let presentValue: number | string = "N/A";
         let gainLoss: number | string = "N/A";
+        
         let currentPrice: number | string = cmp?.currentPrice ?? "N/A";
+
+        console.log("in here i got the current price")
+        console.log(currentPrice)
+
+
         let portfolioPct: number | string = "N/A";
 
         if (typeof cmp.currentPrice === "number") {
@@ -93,7 +99,9 @@ export async function allMarketData(data:GroupedStocksBySector): Promise<Portfol
     }
 
 
-    console.log("endddddddddddddddddddddddddddddddddddddddddddd", sectorResults);
+    // console.log("endddddddddddddddddddddddddddddddddddddddddddd", sectorResults);
+  
+
 
 
     return sectorResults;

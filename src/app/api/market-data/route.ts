@@ -18,6 +18,15 @@ export async function POST(request:NextRequest) {
 
         const resAllData=await   allMarketData(data)
 
+
+        Object.entries(resAllData).forEach(([sectorName, sectorData]) => {
+  console.log(`Sector: ${sectorName}`)
+  console.log("Stocks:", sectorData.stocks)   // full array
+})
+
+
+        
+
         if(!resAllData){
           return NextResponse.json({success:false, message: "error while fetching" },{ status: 500 })
         }

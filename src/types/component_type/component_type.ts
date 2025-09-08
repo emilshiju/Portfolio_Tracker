@@ -38,29 +38,29 @@ export type TableRow = StockType & Partial<StockSummary>;
 
 export type newTableRow=Record<string,StockType& Partial<allSector>>
 
-export interface TableRowOne {
+export interface finalTableRow {
 
    isSector: boolean
   sectorName: string
 
-  // Sector summary fields
+  
   totalInvestment?: number
   totalPresentValue?: number
   totalGainLoss?: number
   portfolioRatio?: number
 
-  // Stock fields
+  
   particulars?: string
   purchasePrice?: number
   quantity?: number
   investment?: number
-  portfolioPct?: number
+  portfolioPct?: number|string
   exchange?: string
-  cmp?: number
-  presentValue?: number
-  gainLoss?: number
-  peRatio?: number
-  latestEarnings?: string
+  cmp?: number|string
+  presentValue?: number|string
+  gainLoss?: number|string
+  peRatio?: number|string
+  latestEarnings?: number|string
 
 
 }

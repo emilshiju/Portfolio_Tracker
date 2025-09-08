@@ -1,18 +1,20 @@
-import { TableRowOne } from "../types/component_type/component_type"
+import { finalTableRow } from "../types/component_type/component_type"
+import { GroupedStocksBySector, StockWithSectorType } from "../types/controller_type/controller_type"
 
 
-const transformData = (backendData: any): TableRowOne[] => {
-  const rows: TableRowOne[] = []
+const transformData = (backendData: GroupedStocksBySector): finalTableRow[] => {
 
-  Object.entries(backendData).forEach(([sectorName, stocks]: [string, any]) => {
-    // Push sector row
+  const rows: finalTableRow[] = []
+
+  Object.entries(backendData).forEach(([sectorName, stocks]: [string, StockWithSectorType[]]) => {
+  
     rows.push({
       isSector: true,
       sectorName,
     })
 
-    // Push stock rows
-    stocks.forEach((stock: any) => {
+  
+    stocks.forEach((stock: StockWithSectorType) => {
       rows.push({
         isSector: false,
         sectorName,
