@@ -48,8 +48,15 @@ export async function allMarketData(data:GroupedStocksBySector): Promise<Portfol
       for (const stock of stocks) {
         const { particulars, exchange, purchasePrice, quantity } = stock;
 
-        const cmp = await getStockPrice(particulars, exchange);
-        const googleData = await getGoogleFinanceData(particulars, exchange);
+        // const cmp = await getStockPrice(particulars, exchange);
+        // const googleData = await getGoogleFinanceData(particulars, exchange);
+
+          
+    const [cmp, googleData] = await Promise.all([
+      getStockPrice(particulars, exchange),
+      getGoogleFinanceData(particulars, exchange)
+    ]);
+
 
         const investment = purchasePrice * quantity;
         sectorInvestment += investment;

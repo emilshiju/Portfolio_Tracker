@@ -4,8 +4,35 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 
+
+// Cache setup
+type GoogleFinanceCacheEntry = {
+  peRatio: string;
+  latestEarnings: string;
+  timestamp: number;
+};
+
+const googleFinanceCache: Record<string, GoogleFinanceCacheEntry> = {};
+const CACHE_TTL = 15 * 1000; // 15 seconds
+
+
 export async function getGoogleFinanceData(ticker: string, exchange: string) {
   try {
+
+
+    const cacheKey = `${ticker}-${exchange}`;
+    const cached = googleFinanceCache[cacheKey];
+
+    // Return cached value if valid
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      return {
+        peRatio: cached.peRatio,
+        latestEarnings: cached.latestEarnings,
+      };
+    }
+
+
+
     const url = `https://www.google.com/finance/quote/${ticker}:${exchange}`;
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
@@ -29,6 +56,15 @@ export async function getGoogleFinanceData(ticker: string, exchange: string) {
     });
 
     // Always return an object with the same keys
+
+     // Save in cache
+       const result = {
+      peRatio: peRatio || "N/A",
+      latestEarnings: eps || "N/A",
+    };
+    
+    googleFinanceCache[cacheKey] = { ...result, timestamp: Date.now() };
+
     return {
      
       peRatio: peRatio || "N/A",

@@ -134,7 +134,6 @@ const ShowTableContainer=()=>{
 
     try {
 
-
         
         const liveDataResponse = await getLiveMarketDataApi(stocks);
         
@@ -160,6 +159,9 @@ const ShowTableContainer=()=>{
 
     } catch (error) {
         console.error("Error fetching live market data:", error);
+        setErrorText('Error fetching live market data')
+        setData({})
+        setTableData([])
     }
 };
 
@@ -171,6 +173,8 @@ const ShowTableContainer=()=>{
     const fetchAllStock = async () => {
         
         try {
+
+          
 
           setSkeleton(true)
 
@@ -196,6 +200,7 @@ const ShowTableContainer=()=>{
 
         } catch (error) {
             console.error("Error fetching stock data:", error);
+            setErrorText('Error fetching stock data')
         } finally {
            setSkeleton(false)
         }

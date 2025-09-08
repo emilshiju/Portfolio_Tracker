@@ -1,11 +1,29 @@
 
 
 
+// Simple in-memory cache
+type CacheEntry = { currentPrice: number | string; timestamp: number };
+const stockPriceCache: Record<string, CacheEntry> = {};
+const CACHE_TTL = 15 * 1000; // 15 seconds
+
+
+
 
 import yahooFinance from 'yahoo-finance2';
 
 export async function getStockPrice(ticker: string , exchange: string) {
+
   try {
+
+      const cacheKey = `${ticker}-${exchange}`;
+    const cached = stockPriceCache[cacheKey];
+
+   
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      return { currentPrice: cached.currentPrice }; 
+    }
+
+
     
      let yahooTicker = ticker;
     if (exchange.toUpperCase() === "NSE") {
@@ -17,6 +35,8 @@ export async function getStockPrice(ticker: string , exchange: string) {
 
     const quote = await yahooFinance.quote(yahooTicker);
 
+  // Save in cache
+    stockPriceCache[cacheKey] = { currentPrice:quote?.regularMarketPrice ?? "N/A", timestamp: Date.now() };
 
     
     return {
