@@ -11,6 +11,7 @@ import { getAllStockApi, getLiveMarketDataApi } from "../lib/api_service_client/
 import { StockSummary } from "../types/controller_type/controller_type";
 import transformData from "../util/transformData";
 import flattenSectors from "../util/formatters";
+import TableSkeleton from "./skeleton/TableSkeleton";
 
 
 
@@ -115,6 +116,12 @@ const ShowTableContainer=()=>{
 
     const [tableData,setTableData]=useState<finalTableRow[]>([]);
 
+    const [errorText, setErrorText] = useState<string | null>(null);
+
+    const [showSkeleton,setSkeleton]=useState(false)
+
+
+
 
     const fetchLiveData = async (stocks:newTableRow) => {
     const sectorsCheck  = stocks || allData;
@@ -133,8 +140,7 @@ const ShowTableContainer=()=>{
         
         if (liveDataResponse.success && liveDataResponse.data) {
 
-
-
+           setErrorText(null)
 
            let ressData=flattenSectors(liveDataResponse.data)
 
@@ -142,6 +148,13 @@ const ShowTableContainer=()=>{
           setTableData(ressData)
           
             
+        }
+
+
+        if(liveDataResponse.success==false){
+           setErrorText(liveDataResponse.message)
+           setData({})
+           setTableData([])
         }
 
 
@@ -158,9 +171,14 @@ const ShowTableContainer=()=>{
     const fetchAllStock = async () => {
         
         try {
+
+          setSkeleton(true)
+
             const allStock = await getAllStockApi();
 
-            if (allStock?.success) {
+            if (allStock.success&&allStock.data) {
+
+              setErrorText(null)
 
 
               const ressData=transformData(allStock.data)
@@ -170,10 +188,16 @@ const ShowTableContainer=()=>{
                
                 await fetchLiveData(allStock.data);
             }
+
+            if(allStock.success==false){
+              setErrorText(allStock.message)
+            }
+
+
         } catch (error) {
             console.error("Error fetching stock data:", error);
         } finally {
-           
+           setSkeleton(false)
         }
     };
 
@@ -214,12 +238,33 @@ const ShowTableContainer=()=>{
 
     
 
+    if(showSkeleton){
+      return <TableSkeleton />
+    }
 
 
     return (
         <div>
 
-       {tableData.length&&<DataTable columns={columns} data={tableData} />}
+         
+
+       {tableData.length>0&&!errorText&&<DataTable columns={columns} data={tableData} />}
+
+
+       {errorText && (
+  <div className="bg-red-100 text-red-700 p-2 rounded-md mb-4 flex justify-between items-center">
+    <span>{errorText}</span>
+    <button
+      className="bg-red-500 text-white px-2 py-1 rounded"
+      onClick={fetchAllStock}
+    >
+      Retry
+    </button>
+  </div>
+)}
+
+
+
             
         </div>
     )

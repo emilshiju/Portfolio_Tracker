@@ -8,6 +8,8 @@ export const getAllStockApi=async()=>{
 
     try{
 
+       
+
         const resAllStock:resCustomType=await axiosClient.get('/all')
         console.log("i got the resposne check it ",resAllStock)
         
@@ -37,7 +39,12 @@ export const getAllStockApi=async()=>{
 
 
 export const getLiveMarketDataApi = async (stocks:newTableRow) => {
+
+     
+
     try {
+        // throw new Error("faild")
+
         const response:resCustomType = await axiosClient.post(
             '/market-data', 
              stocks
