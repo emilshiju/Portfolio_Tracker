@@ -15,6 +15,7 @@ import TableSkeleton from "./skeleton/TableSkeleton";
 import { GroupedStocksBySector } from "../types/controller_type/controller_type";
 
 const ShowTableContainer = () => {
+  
   const columnHelper = createColumnHelper<finalTableRow>();
 
   const columns = useMemo(
@@ -238,7 +239,12 @@ const ShowTableContainer = () => {
   return (
     <div>
       {tableData.length > 0 && !errorText && (
+        <>
+        <div className="text-red-600 text-sm font-bold text-center">
+                ⚠️ Disclaimer: Data shown may be scraped or unofficial and could vary in accuracy.
+              </div>
         <DataTable columns={columns} data={tableData} />
+        </>
       )}
 
       {errorText && (
