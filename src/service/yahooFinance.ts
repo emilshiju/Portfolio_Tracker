@@ -48,7 +48,7 @@ if(cached){
 
   // Save in cache
     stockPriceCache[cacheKey] = { currentPrice:quote?.regularMarketPrice ?? "N/A", timestamp: Date.now() };
-   console.log("last",stockPriceCache)
+  //  console.log("last",stockPriceCache)
     
     return {
       currentPrice: quote?.regularMarketPrice ?? "N/A"

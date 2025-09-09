@@ -23,6 +23,9 @@ export async function getGoogleFinanceData(ticker: string, exchange: string) {
     const cacheKey = `${ticker}-${exchange}`;
     const cached = googleFinanceCache[cacheKey];
 
+    console.log("google finance")
+    // console.log(googleFinanceCache)
+
     // Return cached value if valid
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
       return {
@@ -63,6 +66,8 @@ export async function getGoogleFinanceData(ticker: string, exchange: string) {
       latestEarnings: eps || "N/A",
     };
     
+    console.log("1111")
+
     googleFinanceCache[cacheKey] = { ...result, timestamp: Date.now() };
 
     return {

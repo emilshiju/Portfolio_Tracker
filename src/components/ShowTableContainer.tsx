@@ -127,14 +127,7 @@ const ShowTableContainer=()=>{
         ? <strong>{row.original.sectorName}</strong>
         : row.original.particulars ?? "Loading...",
   },
-  {
-    accessorKey: "investment",
-    header: "Investment",
-    cell: ({ row }: { row: { original: finalTableRow } }) =>
-      row.original.isSector
-        ? row.original.totalInvestment
-        : (row.original.investment ?? "Loading..."),
-  },
+
   {
     accessorKey: "purchasePrice",
     header: "PurchasePrice",
@@ -143,6 +136,7 @@ const ShowTableContainer=()=>{
         ? null
         : (row.original.purchasePrice ?? "Loading..."),
   },
+
   {
     accessorKey: "quantity",
     header: "Quantity",
@@ -151,6 +145,41 @@ const ShowTableContainer=()=>{
         ? null
         : (row.original.quantity ?? "Loading..."),
   },
+
+  {
+    accessorKey: "investment",
+    header: "Investment",
+    cell: ({ row }: { row: { original: finalTableRow } }) =>
+      row.original.isSector
+        ? row.original.totalInvestment
+        : (row.original.investment ?? "Loading..."),
+  },
+
+   {
+    accessorKey: "portfolioPct",
+    header: "Portfolio (%)",
+    cell: ({ row }: { row: { original: finalTableRow } }) =>
+      row.original.isSector
+        ? row.original.portfolioRatio
+        : (row.original.portfolioPct ?? "Loading..."),
+  },
+
+{
+    accessorKey: "exchange",
+    header: "exchange",
+    cell: ({ row }: { row: { original: finalTableRow } }) =>
+      row.original.isSector
+        ? null
+        : (row.original.exchange ?? "Loading..."),
+  },
+
+   {
+    accessorKey: "cmp",
+    header: "CMP",
+    cell: ({ row }: { row: { original: finalTableRow } }) =>
+      row.original.isSector ? null : (row.original.cmp ?? "Loading..."),
+  },
+  
   {
     accessorKey: "presentValue",
     header: "Present Value",
@@ -159,14 +188,7 @@ const ShowTableContainer=()=>{
         ? row.original.totalPresentValue
         : (row.original.presentValue ?? "Loading..."),
   },
-   {
-    accessorKey: "exchange",
-    header: "exchange",
-    cell: ({ row }: { row: { original: finalTableRow } }) =>
-      row.original.isSector
-        ? null
-        : (row.original.exchange ?? "Loading..."),
-  },
+   
   {
     accessorKey: "gainLoss",
     header: "Gain / Loss",
@@ -175,32 +197,22 @@ const ShowTableContainer=()=>{
         ? row.original.totalGainLoss
         : (row.original.gainLoss ?? "Loading..."),
   },
-  {
-    accessorKey: "portfolioPct",
-    header: "Portfolio (%)",
-    cell: ({ row }: { row: { original: finalTableRow } }) =>
-      row.original.isSector
-        ? row.original.portfolioRatio
-        : (row.original.portfolioPct ?? "Loading..."),
-  },
-  {
-    accessorKey: "cmp",
-    header: "CMP",
-    cell: ({ row }: { row: { original: finalTableRow } }) =>
-      row.original.isSector ? null : (row.original.cmp ?? "Loading..."),
-  },
+ 
+ 
   {
     accessorKey: "peRatio",
     header: "P/E",
     cell: ({ row }: { row: { original: finalTableRow } }) =>
       row.original.isSector ? null : (row.original.peRatio ?? "Loading..."),
   },
+
   {
     accessorKey: "latestEarnings",
     header: "Latest Earnings",
     cell: ({ row }: { row: { original: finalTableRow } }) =>
       row.original.isSector ? null :  (row.original.latestEarnings ?? "Loading...") ,
   },
+
   {
   accessorKey: "status",
   header: "Status",

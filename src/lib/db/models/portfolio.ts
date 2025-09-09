@@ -1,6 +1,7 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models,Types } from 'mongoose';
 
 const PortfolioSchema = new Schema({
+  _id: { type: Types.ObjectId },
   userName: { type: String, required: true },
   createdAt: { type: Date }, 
 });

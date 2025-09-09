@@ -11,6 +11,8 @@ export async function POST(request:NextRequest) {
 
     console.log("second request came")
 
+    console.log(Date.now())
+
 
         const data :GroupedStocksBySector= await request.json()
         
@@ -20,10 +22,10 @@ export async function POST(request:NextRequest) {
         const resAllData=await   allMarketData(data)
 
 
-        Object.entries(resAllData).forEach(([sectorName, sectorData]) => {
-  console.log(`Sector: ${sectorName}`)
-  console.log("Stocks:", sectorData.stocks)   // full array
-})
+//         Object.entries(resAllData).forEach(([sectorName, sectorData]) => {
+//   console.log(`Sector: ${sectorName}`)
+//   console.log("Stocks:", sectorData.stocks)   // full array
+// })
 
 
         
