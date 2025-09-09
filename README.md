@@ -29,9 +29,7 @@ DB_NAME=portfolioDB
 # Make sure to replace <send in the email> with the actual database URL provided.
 
 
-
-
-
+```
 
 
 
@@ -48,3 +46,5 @@ npm run build
 
 # Step 2: Start the project
 npm run start
+
+```
