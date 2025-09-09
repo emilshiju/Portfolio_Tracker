@@ -239,12 +239,23 @@ const ShowTableContainer = () => {
   return (
     <div>
       {tableData.length > 0 && !errorText && (
-        <>
-        <div className="text-red-600 text-sm font-bold text-center">
-                ⚠️ Disclaimer: Data shown may be scraped or unofficial and could vary in accuracy.
-              </div>
-        <DataTable columns={columns} data={tableData} />
-        </>
+        // <>
+        // <div className="text-red-600 text-sm font-bold text-center">
+        //         ⚠️ Disclaimer: Data shown may be scraped or unofficial and could vary in accuracy.
+        //       </div>
+
+        // <DataTable columns={columns} data={tableData} />
+        // </>
+
+        <div className="overflow-x-auto">
+    <div className="min-w-max text-red-600 text-sm font-bold text-center whitespace-nowrap mb-2">
+      ⚠️ Disclaimer: Data shown may be scraped or unofficial and could vary in accuracy.
+    </div>
+
+    <DataTable columns={columns} data={tableData} />
+  </div>
+
+  
       )}
 
       {errorText && (
