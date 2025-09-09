@@ -1,11 +1,11 @@
-import { MONGODB_URI } from '@/src/config/db';
+import { MONGODB_URI } from "@/src/config/db";
 
-
-import mongoose, { Mongoose } from 'mongoose';
-
+import mongoose, { Mongoose } from "mongoose";
 
 if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+  throw new Error(
+    "Please define the MONGODB_URI environment variable inside .env.local"
+  );
 }
 
 // Extend the global object to include mongoose cache

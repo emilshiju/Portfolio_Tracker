@@ -1,11 +1,6 @@
-
-
-
-
 export interface stockDetails {
   [key: string]: string;
 }
-
 
 export interface StockSummary {
   particulars: string;
@@ -13,15 +8,13 @@ export interface StockSummary {
   purchasePrice: number;
   quantity: number;
   investment: number;
-  portfolioPct:number|string
+  portfolioPct: number | string;
   presentValue: number | string;
   gainLoss: number | string;
   cmp: number | string;
   peRatio: number | string;
   latestEarnings: number | string;
 }
-
-
 
 export interface StockWithSectorType {
   particulars: string;
@@ -32,18 +25,6 @@ export interface StockWithSectorType {
 }
 
 export type GroupedStocksBySector = Record<string, StockWithSectorType[]>;
-
-
-
-
-
-
-
-
-
-
-
-
 
 export interface SectorSummary {
   totalInvestment: number;
@@ -56,6 +37,5 @@ export interface allSector {
   stocks: StockSummary[];
   summary: SectorSummary;
 }
-
 
 export type PortfolioData = Record<string, allSector>;

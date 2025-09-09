@@ -6,13 +6,11 @@ const outfit = Outfit({
   subsets: ["latin"],
 });
 
-
 export const metadata: Metadata = {
   title: "Portfolio Tracker",
   description:
     "A real-time web application to track and analyze stock portfolio performance ",
 };
-
 
 export default function RootLayout({
   children,
@@ -21,9 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${outfit.className}`}>
-        {children}
-      </body>
+      <body className={`${outfit.className}`}>{children}</body>
     </html>
   );
 }

@@ -1,9 +1,5 @@
-
-
-
 import axios from "axios";
 import * as cheerio from "cheerio";
-
 
 // Cache setup
 type GoogleFinanceCacheEntry = {
@@ -13,28 +9,19 @@ type GoogleFinanceCacheEntry = {
 };
 
 const googleFinanceCache: Record<string, GoogleFinanceCacheEntry> = {};
-const CACHE_TTL = 15 * 1000; // 15 seconds
-
+const CACHE_TTL = 15 * 1000;
 
 export async function getGoogleFinanceData(ticker: string, exchange: string) {
   try {
-
-
     const cacheKey = `${ticker}-${exchange}`;
     const cached = googleFinanceCache[cacheKey];
 
-    console.log("google finance")
-    // console.log(googleFinanceCache)
-
-    // Return cached value if valid
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
       return {
         peRatio: cached.peRatio,
         latestEarnings: cached.latestEarnings,
       };
     }
-
-
 
     const url = `https://www.google.com/finance/quote/${ticker}:${exchange}`;
     const { data } = await axios.get(url);
@@ -58,37 +45,23 @@ export async function getGoogleFinanceData(ticker: string, exchange: string) {
       }
     });
 
-    // Always return an object with the same keys
-
-     // Save in cache
-       const result = {
+    const result = {
       peRatio: peRatio || "N/A",
       latestEarnings: eps || "N/A",
     };
-    
-    console.log("1111")
 
     googleFinanceCache[cacheKey] = { ...result, timestamp: Date.now() };
 
     return {
-     
       peRatio: peRatio || "N/A",
       latestEarnings: eps || "N/A",
     };
   } catch (error) {
     console.error(`Error fetching Google Finance data for ${ticker}:`, error);
 
-    
     return {
-     
       peRatio: "N/A",
       latestEarnings: "N/A",
     };
   }
 }
-
-// Example usage
-(async () => {
-  const result = await getGoogleFinanceData("ICICIBANK", "NSE");
-  console.log(result);
-})();
