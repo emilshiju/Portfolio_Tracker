@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosClient = axios.create({
   // baseURL: "http://localhost:3000/api",
-  baseURL:"https://portfolio-tracker-sjsx.vercel.app/"
+  baseURL:"https://portfolio-tracker-sandy.vercel.app/"
 });
 
 axiosClient.interceptors.request.use(
